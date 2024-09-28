@@ -50,17 +50,18 @@ def write_file_to_output(file_path, outfile, top_dir, include_binary):
     # Calculate relative path
     rel_path = os.path.relpath(file_path, top_dir)
     
+    # Add header with the relative file path
+    outfile.write(f"// {rel_path}\n")
+    
     # Check if the file is binary
     if is_binary(file_path):
         if include_binary:
-            outfile.write(f"// {rel_path} (binary file)\n\n")
+            outfile.write(f"// (binary file)\n\n")
         else:
             if args.verbose:
                 print(f"Skipping binary file: {file_path}")
         return
 
-    # Add header with the relative file path
-    outfile.write(f"// {rel_path}\n")
     # Try opening each file with UTF-8 encoding; fallback to ignore errors
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as infile:
